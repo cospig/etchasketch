@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="style.css" type="text/css">
+    </head>
+        <body>
+        <main>
+            <div id="title">
+                <h1>Etch-a-Sketch!</h1>
+                <button class="controls" onclick="clearSketch()">Clear Sketchpad</button>
+                <button class="controls" onclick="newSketch()">New Sketchpad</button>
+            </div>
+            <div class="wrapper">
+            </div>
+        </main>
+
+
+         <script>
+        
+            const wrapper = document.querySelector(".wrapper");
+
+            
+            for (let i=0; i<256; i++) {
+                const box = document.createElement("div");
+                box.classList.toggle("gridItem");
+                wrapper.appendChild(box);
+            }
+
+            const gridBoxes = document.querySelectorAll(".gridItem");
+            
+            gridBoxes.forEach(function(grid) {
+            grid.addEventListener("mouseenter", function() {
+                let hex = randomColour(16)
+                grid.setAttribute("style", `background-color:#${hex}`);
+            });
+            });
+            
+
+
+
+            function clearSketch() {
+                gridBoxes.forEach(function(grid) {
+                    grid.setAttribute("style", "background-color:rgb(225, 247, 255);"); 
+            });
+            }
+
+            function newSketch() {
+            let numberSquares = prompt("How many squares per side would you like for your new grid? Please enter a positive number larger than zero."); 
+            if ((numberSquares === "") || (numberSquares === null)) {
+                return;
+            }
+            else {
+            while (numberSquares <= 0)  {
+                if ((numberSquares === "") || (numberSquares === null)) {
+                    return;
+                }
+                else numberSquares = prompt("How many squares per side would you like for your new grid? Please enter a positive number larger than zero."); 
+            }
+            wrapper.innerHTML = "";
+            let totalSquares = numberSquares*numberSquares;
+            wrapper.setAttribute("style", `grid-template-rows: repeat(${numberSquares}, 1fr); grid-template-columns: repeat(${numberSquares}, 1fr);`);
+            for (let i=0; i<totalSquares; i++) {
+                const box = document.createElement("div");
+                box.classList.toggle("gridItem");
+                wrapper.appendChild(box);
+            }
+            let boxes = document.querySelectorAll(".gridItem");
+            boxes.forEach(function(box) {
+            box.addEventListener("mouseenter", function() {
+                let hex = randomColour(numberSquares)
+                box.setAttribute("style", `background-color:#${hex}`);
+            });
+            });
+            }
+            }
+            
+            function randomColour(num) {
+                let digits = [0,1,2,3,4,5,6,7,8,9, "A", "B", "C", "D", "E", "F"];
+                let randomIndex = Math.floor(Math.random()*num);
+                let randomHex = "";
+                for (let i=0; i<6; i++) {
+                    randomHex += digits[randomIndex];
+                }
+                return randomHex;
+            }
+
+
+
+
+        </script> 
+        </body>
+</html>
